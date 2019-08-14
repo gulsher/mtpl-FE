@@ -8,27 +8,25 @@ export default class HomePage extends Component {
             <div>
                 <Router>
                     <div className="mian-container">
-                        {/* <div className="row"> */}
-                            <div className="left-menu">
-                                <LeftMenuPage />
-                            </div>
-                            <div className="right-menu">
-                                <Switch>
-                                    {routes.map((route, key) => {
-                                        return route.component ? (
-                                            <Route
-                                                key={key}
-                                                path={route.path}
-                                                exact={route.exact}
-                                                name={route.name}
-                                                children={route.children}
-                                                render={props => <route.component {...props} />}
-                                            />
-                                        ) : null;
-                                    })}
-                                </Switch>
-                            </div>
-                        {/* </div> */}
+                        <div className="left-menu">
+                            <LeftMenuPage />
+                        </div>
+                        <div className="right-menu">
+                            <Switch>
+                                {routes.map((route, key) => {
+                                    return route.component ? (
+                                        <Route
+                                            key={key}
+                                            path={route.path}
+                                            exact={route.exact}
+                                            name={route.name}
+                                            children={route.children}
+                                            render={props => <route.component {...props} />}
+                                        />
+                                    ) : null;
+                                })}
+                            </Switch>
+                        </div>
                     </div>
                 </Router>
 

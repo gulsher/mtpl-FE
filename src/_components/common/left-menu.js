@@ -8,7 +8,7 @@ export default class LeftMenuPage extends Component {
                 <p class="muted-p mt-4 mb-1">Navigation</p>
                 <ul>
                     <li>
-                        <NavLink to="/">Channels</NavLink>
+                        <NavLink to="/main">Channels</NavLink>
                     </li>
                     <li>
                         <NavLink to="/packages">Packages</NavLink>
