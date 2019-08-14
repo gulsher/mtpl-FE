@@ -94,6 +94,64 @@ a:hover {
   opacity: 0.5;
 }
 
+.logininfo {
+  color: #1B1464;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.logininfo .login__box {
+  width: 300px;
+  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.16);
+          box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.16);
+  margin-bottom: 25px;
+}
+
+.logininfo .login__box .login__head {
+  background-color: #1B1464;
+  padding: 20px 0;
+  text-align: center;
+}
+
+.logininfo .login__box h6 {
+  margin: 15px 0 0 0;
+}
+
+.logininfo .login__box .login__content {
+  padding: 20px;
+}
+
+.logininfo .login__box .login__content .form-control::-webkit-input-placeholder {
+  color: #1B1464;
+  font-size: 14px;
+}
+
+.logininfo .login__box .login__content .form-control:-ms-input-placeholder {
+  color: #1B1464;
+  font-size: 14px;
+}
+
+.logininfo .login__box .login__content .form-control::-ms-input-placeholder {
+  color: #1B1464;
+  font-size: 14px;
+}
+
+.logininfo .login__box .login__content .form-control::placeholder {
+  color: #1B1464;
+  font-size: 14px;
+}
+
+.logininfo .login__box .login__content .blue__btn {
+  padding: 6px 24px;
+}
+
+.logininfo .last-p {
+  opacity: 0.2;
+}
+
 .custom__modal .modal-header {
   background-color: #1B1464;
   color: #fff;
