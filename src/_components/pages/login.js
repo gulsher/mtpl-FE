@@ -1,25 +1,59 @@
 import React, { Component } from "react";
-export default class LoginPage extends Component {
+import { NavLink } from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import { loginService } from "./../../_services/login_service";
+import { toast } from "react-toastify";
+ class LoginPage extends Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            email: '',
+            password: ''
+        }
+    }
+
+    handleUserLogin = async () => {
+        let response = await loginService.postLogin(this.state);
+        if (response && response.token) {
+            toast.success("Login successfully")
+          localStorage.setItem("tokens", response.token);
+          localStorage.setItem("userId", response.result.id);
+          localStorage.setItem("role", response.result.role);
+          localStorage.setItem("name", response.result.name);
+          localStorage.setItem("email", response.result.email);
+          this.props.history.push("/main");
+        }
+      };
+
+    onChangeHandler = (e) => {
+        this.setState({
+            [e.target.name] : e.target.value
+        })
+    }
+
     render() {
         return (
-            <div class="logininfo">
-                <div class="login__box">
-                    <div class="login__head">
+            <div className="logininfo">
+                <div className="login__box">
+                    <div className="login__head">
                         <img src="/assets/images/mtpl-logo-top.svg" alt="" />
                     </div>
-                    <h6 class="text-center text-uppercase"><b>Login</b></h6>
-                    <div class="login__content">
-                        <div class="form-group">
-                            <input class="form-control blue-from" placeholder="Login" />
+                    <h6 className="text-center text-uppercase"><b>Login</b></h6>
+                    <div className="login__content">
+                        <div className="form-group">
+                            <input className="form-control blue-from" onChange={this.onChangeHandler} name="email" placeholder="Login" />
                         </div>
-                        <div class="form-group">
-                            <input class="form-control blue-from" placeholder="Password" />
+                        <div className="form-group">
+                            <input className="form-control blue-from" onChange={this.onChangeHandler} name="password" type="password" placeholder="Password" />
                         </div>
-                        <button class="btn blue__btn w-100" onclick="window.location.href='index.html'">Login</button>
+                        <button className="btn blue__btn w-100" onClick={this.handleUserLogin}   >Login</button>
                     </div>
                 </div>
-                <p class="last-p text-center"><b>Logical Sorting System</b></p>
+                <p className="last-p text-center"><b>Logical Sorting System</b></p>
             </div>
         )
     }
 }
+
+export default withRouter(LoginPage);

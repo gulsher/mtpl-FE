@@ -1,0 +1,3 @@
+export const config = {
+    apiUrl: "http://134.209.149.25:4000/"
+  };

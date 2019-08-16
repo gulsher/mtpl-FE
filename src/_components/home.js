@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LeftMenuPage from "./common/left-menu";
 import routes from "../routes";
 export default class HomePage extends Component {
+    
     render() {
         return (
             <div>
