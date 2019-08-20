@@ -5,6 +5,7 @@ import Select from 'react-select';
 import { async } from "q";
 import { toast } from "react-toastify";
 import SimpleReactValidator from "simple-react-validator";
+import $ from "jquery";
 
 class MainPage extends Component {
     constructor(props){
@@ -16,11 +17,11 @@ class MainPage extends Component {
             languageOptions:[],
             genreOptions:[],
             //add channel
-            selectedBroadcast:{},
+            selectedBroadcast:"",
             channelNameInput:'',
-            selectedRegion:{},
-            selectedLanguage:{},
-            selectedGenre:{},
+            selectedRegion:"",
+            selectedLanguage:"",
+            selectedGenre:"",
             priceInput:'',
             imageText:'',
             imageData: {},
@@ -165,7 +166,22 @@ class MainPage extends Component {
    addChannel = async() =>{
        console.log("api Call")
        if(this.validator.allValid()){
-           alert("working")
+           let payload = {
+               languageId: this.state.selectedLanguage.id,
+               genreId:this.state.selectedGenre.id,
+               regionId: this.state.selectedRegion.id,
+               broadCasterId: this.state.selectedBroadcast.id,
+               channelName: this.state.channelNameInput,
+               price: this.state.priceInput,
+               channelImage: this.state.imageData.id
+           }
+           let resp = await loginService.addChannel(payload);
+           if(resp){
+            $(".close").click();
+            toast.success("Channel added Successfully");
+            this.cancelAll();
+            this.getChannelList();
+           }
        }
        else{
         this.validator.showMessages();
@@ -173,6 +189,19 @@ class MainPage extends Component {
        }
    }
 
+  cancelAll = () =>{
+      this.setState({
+        selectedBroadcast:"",
+        channelNameInput:'',
+        selectedRegion:"",
+        selectedLanguage:"",
+        selectedGenre:"",
+        priceInput:'',
+        imageText:'',
+        imageData: {}
+      })
+  }
+   
     render() {
         return (
             <div>
@@ -243,7 +272,9 @@ class MainPage extends Component {
                                         onChange={this.handleBroadcastSelect}
                                         options={this.state.broadcastOptions}
                                         placeholder="Broadcaster"
-                                        value={this.state.selectedBroadcast.value && this.state.selectedBroadcast}
+                                        value={this.state.selectedBroadcast}
+                                        
+                                    
                                     />
                                     <div className="help-block">
                     {this.validator.message(
@@ -269,7 +300,7 @@ class MainPage extends Component {
                                         onChange={this.handleRegion}
                                         options={this.state.regionOptions}
                                         placeholder="Select Region"
-                                        value={this.state.selectedRegion.value && this.state.selectedRegion}
+                                        value={this.state.selectedRegion}
                                     />
                                     <div className="help-block">
                     {this.validator.message(
@@ -284,7 +315,7 @@ class MainPage extends Component {
                                         onChange={this.handleLanguage}
                                         options={this.state.languageOptions}
                                         placeholder="Select Language"
-                                        value={this.state.selectedLanguage.value && this.state.selectedLanguage}
+                                        value={this.state.selectedLanguage}
 
                                     />
                                     <div className="help-block">
@@ -300,7 +331,7 @@ class MainPage extends Component {
                                         onChange={this.handleGenre}
                                         options={this.state.genreOptions}
                                         placeholder="select Genre"
-                                        value={this.state.selectedGenre.value && this.state.selectedGenre }
+                                        value={this.state.selectedGenre }
                                     />
                                     <div className="help-block">
                     {this.validator.message(
@@ -336,7 +367,7 @@ class MainPage extends Component {
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn blue__btn" onClick={this.addChannel} >Add Channel</button>
-                                <button type="button" className="btn cancel__btn" data-dismiss="modal">Cancel</button>
+                                <button type="button" className="btn cancel__btn" data-dismiss="modal" onClick={this.cancelAll}  >Cancel</button>
                             </div>
                         </div>
                     </div>
