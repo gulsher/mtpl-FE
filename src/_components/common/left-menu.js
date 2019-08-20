@@ -39,7 +39,7 @@ import { toast } from "react-toastify";
                   <NavLink to="/packs">Packs</NavLink>
               </li>
               <li>
-                  <button className="btn" onClick={this.logout} > Logout </button>
+                  <button className="btn btn-logout" onClick={this.logout} > Logout </button>
               </li>
           </ul>
       </div>
