@@ -1,20 +1,27 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { withRouter } from "react-router-dom";
+import { withRouter , Redirect } from "react-router-dom";
 import { loginService } from "./../../_services/login_service";
 import { toast } from "react-toastify";
  class LoginPage extends Component {
 
     constructor(props){
         super(props);
+        
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            loggedIn : false
         }
     }
-
+    
+    
     handleUserLogin = async () => {
-        let response = await loginService.postLogin(this.state);
+        let payload = {
+            email: this.state.email,
+            password: this.state.password
+        }
+        let response = await loginService.postLogin(payload);
         if (response && response.token) {
             toast.success("Login successfully")
           localStorage.setItem("tokens", response.token);
@@ -22,7 +29,10 @@ import { toast } from "react-toastify";
           localStorage.setItem("role", response.result.role);
           localStorage.setItem("name", response.result.name);
           localStorage.setItem("email", response.result.email);
-          this.props.history.push("/main");
+          this.setState({
+              loggedIn: true
+          })
+        //   this.props.history.push("/main");
         }
       };
 
@@ -33,6 +43,10 @@ import { toast } from "react-toastify";
     }
 
     render() {
+        if(this.state.loggedIn === true){
+            return <Redirect to="/main" />
+        }
+        
         return (
             <div className="logininfo">
                 <div className="login__box">

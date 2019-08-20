@@ -9,7 +9,8 @@ export const http = {
   put,
   patch,
   delete: remove,
-  remove
+  remove,
+  fileUpload
 };
 
 function get(
@@ -65,6 +66,24 @@ function put(
   }
   return responsePromise.then(handleResponse).catch(handleError);
 }
+
+function fileUpload(
+  url /*: string */,
+  data /*: mixed */,
+  headers /*: any */,
+  raw /*: ?boolean */ = false
+ ) {
+  headers= headers ? headers : { ...authHeader() , }
+    delete headers["content-type"]
+  const requestOptions = {
+    method: "POST",
+    headers: headers,
+    body: data
+  };
+  return fetch(url, requestOptions)
+    .then(handleResponse)
+    .catch(handleError);
+ }
 
 function patch(
   url /*: string */,
@@ -130,7 +149,8 @@ function handleResponse(response) {
     try {
       const data = text && JSON.parse(text);
       if ((data.statusCode) !== 200 && (data.statusCode !== 201)) {
-        toast.error(data.message || data.output.payload.message);
+        // toast.error(data.message || data.output.payload.message);
+        console.log(data.message)
       }
       return data;
     } catch (error) {

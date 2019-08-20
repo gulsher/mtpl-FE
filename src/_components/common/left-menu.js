@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
-import { withRouter, Redirect, BrowserRouter, Route, Switch } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 import { loginService } from "./../../_services/login_service";
 import { toast } from "react-toastify";
 
@@ -16,16 +16,18 @@ import { toast } from "react-toastify";
         localStorage.removeItem("role");
         localStorage.removeItem("name");
         localStorage.removeItem("email");
+        this.setState({loggedIn: false})
         this.props.history.push("/");
 
         } 
     }
 
-    render() {
-        let menu = localStorage.getItem('tokens')
-          ? (<div class="left-part">
+    render() { 
+        return (
+            <div>
+                <div className="left-part">
           <img src="/assets/images/mtpl-logo-top.svg" />
-          <p class="muted-p mt-4 mb-1">Navigation</p>
+          <p className="muted-p mt-4 mb-1">Navigation</p>
           <ul>
               <li>
                   <NavLink to="/main">Channels</NavLink>
@@ -40,13 +42,10 @@ import { toast } from "react-toastify";
                   <button className="btn" onClick={this.logout} > Logout </button>
               </li>
           </ul>
-      </div>) 
-          : null;
-        return (
-            <div>
-                {menu}
-            </div>
-        )
+      </div>
+            </div>)
+            
+        
     }
 }
 

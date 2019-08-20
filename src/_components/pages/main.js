@@ -1,16 +1,188 @@
 import React, { Component } from "react";
 import LeftMenuPage from "../common/left-menu";
+import { loginService } from "../../_services/login_service";
+import Select from 'react-select';
+import { async } from "q";
+import { toast } from "react-toastify";
+import SimpleReactValidator from "simple-react-validator";
+
 class MainPage extends Component {
+    constructor(props){
+        super(props);
+        this.state={
+            channelList :[],
+            broadcastOptions:[],
+            regionOptions:[],
+            languageOptions:[],
+            genreOptions:[],
+            //add channel
+            selectedBroadcast:{},
+            channelNameInput:'',
+            selectedRegion:{},
+            selectedLanguage:{},
+            selectedGenre:{},
+            priceInput:'',
+            imageText:'',
+            imageData: {},
+
+        }
+        this.validator = new SimpleReactValidator();
+    }
+
+  
+  componentDidMount(){
+      this.getChannelList();
+      this.getBroadcastList();
+      this.getRegionList();
+      this.getLanguageList();
+      this.getGenreList();
+  }
+   getChannelList =  async()=> {
+       let resp = await loginService.getChannelList();
+       if (resp.result){
+           this.setState({
+               channelList:resp.result
+           })
+       }
+   }
+   getBroadcastList = async() => {
+       let resp = await loginService.getBroadcastList();
+       if(resp.result){
+          
+        let broadcastOptions =   resp.result.map(item=>{
+               return(
+                   {
+                       value: item.broadCasterName,
+                       label: item.broadCasterName,
+                       id: item.id,
+                       activeStatus: item.activeStatus
+                   }
+               )
+           })
+           this.setState({
+               broadcastOptions: broadcastOptions
+           })
+       }
+   }
+   getRegionList = async() => {
+       let resp = await loginService.getRegionList();
+       if(resp.Region){
+           let regionOptions = resp.Region.map(item=>{
+               return({
+                   value: item.regionName,
+                   label: item.regionName,
+                   id: item.id,
+                   activeStatus: item.activeStatus
+               })
+           })
+           this.setState({regionOptions})
+       }
+   }
+
+   getLanguageList = async() =>{
+       let resp = await loginService.getLanguageList();
+       if(resp.result){
+           let languageOptions = resp.result.map(item=>{
+               return({
+                   value: item.languageName,
+                   label: item.languageName,
+                   id: item.id,
+                   activeStatus: item.activeStatus
+               })
+           })
+           this.setState({languageOptions})
+       }
+   }
+
+   getGenreList = async() =>{
+       let resp = await loginService.getGenreList();
+       if(resp.result){
+           let genreOptions = resp.result.map(item=>{
+               return({
+                   value:item.genreName,
+                   label:item.genreName,
+                   id: item.id,
+                   activeStatus:item.activeStatus
+               })
+           })
+           this.setState({genreOptions})
+       }
+   }
+
+   handleBroadcastSelect = (e) =>{
+    this.setState({
+        selectedBroadcast:e
+    })
+   }
+
+   channelNameHandler = (e)=>{
+       this.setState({
+           channelNameInput: e.target.value
+       })
+   }
+
+   handleRegion = (e) =>{
+       this.setState({
+           selectedRegion:e
+       })
+   }
+   handleLanguage =(e) =>{
+       this.setState({
+           selectedLanguage:e
+       })
+   }
+
+   handleGenre = (e) =>{
+       this.setState({
+           selectedGenre:e
+       })
+   }
+   pricehandler = (e)=>{
+       this.setState({
+           priceInput : e.target.value
+       })
+   }
+   imageUploadHandler = async(e) =>{
+       if(e.target.files.length > 0){
+        let browseImage = URL.createObjectURL(e.target.files[0]);
+    let formData = new FormData();
+       let file = e.target.files[0];
+         formData.append("productImage", file);
+        this.setState({
+            imageText:file.name
+        })
+        
+        let imageResp = await loginService.uploadImage(formData);
+        if(imageResp.result){
+            toast.success("Image uploaded successfully");
+            this.setState({
+                imageData: imageResp.result
+            })
+        }
+       }
+   }
+   
+   addChannel = async() =>{
+       console.log("api Call")
+       if(this.validator.allValid()){
+           alert("working")
+       }
+       else{
+        this.validator.showMessages();
+        this.forceUpdate();
+       }
+   }
+
     render() {
         return (
             <div>
-                <div class="channelsinfo">
-                    <h5 class="main__head">
+                <div className="channelsinfo">
+                    <h5 className="main__head">
                         <b>CHANNELS</b>
-                        <button class="btn blueborder-btn" data-toggle="modal" data-target="#addChannelModal">Add
+                        <button className="btn blueborder-btn" data-toggle="modal" data-target="#addChannelModal">Add
                             Channel</button>
                     </h5>
-                    <table class="table">
+                    <table className="table">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -24,141 +196,147 @@ class MainPage extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <div class="float-left small__img">
-                                        <img src="/assets/images/STAR_Sports_1_logo.png" alt="" />
-                                    </div>
-                                    <div class="right">Star Sports 1 Hindi</div>
-                                    <div class="clearfix"></div>
-                                </td>
-                                <td>Star</td>
-                                <td>North Indian</td>
-                                <td>Hindi</td>
-                                <td>Entertainment</td>
-                                <td>20</td>
-                                <td>
-                                    <a href="#" onclick="return false;" class="text-red">Edit</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>
-                                    <div class="float-left small__img">
-                                        <img src="/assets/images/STAR_Sports_1_logo.png" alt="" />
-                                    </div>
-                                    <div class="right">Star Sports 1 Hindi</div>
-                                    <div class="clearfix"></div>
-                                </td>
-                                <td>Star</td>
-                                <td>North Indian</td>
-                                <td>Hindi</td>
-                                <td>Entertainment</td>
-                                <td>20</td>
-                                <td>
-                                    <a href="#" onclick="return false;" class="text-red">Edit</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>
-                                    <div class="float-left small__img">
-                                        <img src="/assets/images/STAR_Sports_1_logo.png" alt="" />
-                                    </div>
-                                    <div class="right">Star Sports 1 Hindi</div>
-                                    <div class="clearfix"></div>
-                                </td>
-                                <td>Star</td>
-                                <td>North Indian</td>
-                                <td>Hindi</td>
-                                <td>Entertainment</td>
-                                <td>20</td>
-                                <td>
-                                    <a href="#" onclick="return false;" class="text-red">Edit</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>
-                                    <div class="float-left small__img">
-                                        <img src="/assets/images/STAR_Sports_1_logo.png" alt="" />
-                                    </div>
-                                    <div class="right">Star Sports 1 Hindi</div>
-                                    <div class="clearfix"></div>
-                                </td>
-                                <td>Star</td>
-                                <td>North Indian</td>
-                                <td>Hindi</td>
-                                <td>Entertainment</td>
-                                <td>20</td>
-                                <td>
-                                    <a href="#" onclick="return false;" class="text-red">Edit</a>
-                                </td>
-                            </tr>
+
+                            {
+                                
+                                this.state.channelList.map((item,key)=>{
+                                   return(
+                                    <tr key={key}>
+                                    <td>-</td>
+                                    <td>
+                                        <div className="float-left small__img">
+                                            <img src={`data:image/jpeg;base64, ${item.channelImage.image}`} alt="" />
+                                        </div>
+                                        <div className="right">{item.channelName}</div>
+                                        <div className="clearfix"></div>
+                                    </td>
+                                    <td>{item.broadCasterId.broadCasterName}</td>
+                                    <td>{item.regionId.regionName}</td>
+                                    <td>{item.languageId.languageName}</td>
+                                    <td>{item.genreId.genreName}</td>
+                                    <td>{item.price}</td>
+                                    <td>
+                                        <a href="#"  className="text-red">Edit</a>
+                                    </td>
+                                </tr> 
+                                   )
+                                })
+                            }
+                            
                         </tbody>
                     </table>
                 </div>
 
-                <div class="modal fade" id="addChannelModal" tabindex="-1" role="dialog" aria-labelledby="addChannelLabel"
+                <div className="modal fade" id="addChannelModal" tabIndex="-1" role="dialog" aria-labelledby="addChannelLabel"
                     aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content border-0 custom__modal">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addChannelLabel">Add Channel</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <div className="modal-dialog" role="document">
+                        <div className="modal-content border-0 custom__modal">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="addChannelLabel">Add Channel</h5>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div class="modal-body pm-30">
-                                <div class="form-group">
-                                    <select class="custom-select">
-                                        <option selected>Broadcaster</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
+                            <div className="modal-body pm-30">
+                                <div className="form-group">
+                                    <Select
+                                        onChange={this.handleBroadcastSelect}
+                                        options={this.state.broadcastOptions}
+                                        placeholder="Broadcaster"
+                                        value={this.state.selectedBroadcast.value && this.state.selectedBroadcast}
+                                    />
+                                    <div className="help-block">
+                    {this.validator.message(
+                      "Broadcaster",
+                      this.state.selectedBroadcast.value,
+                      "required"
+                    )}
+                  </div>
+
                                 </div>
-                                <div class="form-group">
-                                    <input class="form-control blue-from" placeholder="Channel Name" />
+                                <div className="form-group">
+                                    <input className="form-control blue-from" placeholder="Channel Name" onChange={this.channelNameHandler} value={this.state.channelNameInput} />
+                                    <div className="help-block">
+                    {this.validator.message(
+                      "Broadcaster",
+                      this.state.channelNameInput,
+                      "required"
+                    )}
+                  </div>
                                 </div>
-                                <div class="form-group">
-                                    <select class="custom-select">
-                                        <option selected>Region/Category</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
+                                <div className="form-group">
+                                <Select
+                                        onChange={this.handleRegion}
+                                        options={this.state.regionOptions}
+                                        placeholder="Select Region"
+                                        value={this.state.selectedRegion.value && this.state.selectedRegion}
+                                    />
+                                    <div className="help-block">
+                    {this.validator.message(
+                      "Region",
+                      this.state.selectedRegion.value,
+                      "required"
+                    )}
+                  </div>
                                 </div>
-                                <div class="form-group">
-                                    <select class="custom-select">
-                                        <option selected>Language</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
+                                <div className="form-group">
+                                <Select
+                                        onChange={this.handleLanguage}
+                                        options={this.state.languageOptions}
+                                        placeholder="Select Language"
+                                        value={this.state.selectedLanguage.value && this.state.selectedLanguage}
+
+                                    />
+                                    <div className="help-block">
+                    {this.validator.message(
+                      "Language",
+                      this.state.selectedLanguage.value,
+                      "required"
+                    )}
+                  </div>
                                 </div>
-                                <div class="form-group">
-                                    <select class="custom-select">
-                                        <option selected>Genre</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
-                                    </select>
+                                <div className="form-group">
+                                <Select
+                                        onChange={this.handleGenre}
+                                        options={this.state.genreOptions}
+                                        placeholder="select Genre"
+                                        value={this.state.selectedGenre.value && this.state.selectedGenre }
+                                    />
+                                    <div className="help-block">
+                    {this.validator.message(
+                      "Genre",
+                      this.state.selectedGenre.value,
+                      "required"
+                    )}
+                  </div>
                                 </div>
-                                <div class="form-group">
-                                    <input class="form-control blue-from" placeholder="Price" />
+                                <div className="form-group">
+                                    <input className="form-control blue-from" onChange={this.pricehandler} placeholder="Price" value={this.state.priceInput} />
+                                    <div className="help-block">
+                    {this.validator.message(
+                      "Price",
+                      this.state.priceInput,
+                      "required"
+                    )}
+                  </div>
                                 </div>
-                                <div class="upload-input">
-                                    <input type="file" />
-                                    <div class="check-box">
-                                        <div><b>Upload Channel Photo</b></div>
+                                <div className="upload-input">
+                                    <input type="file" onChange={this.imageUploadHandler} />
+                                    <div className="help-block">
+                    {this.validator.message(
+                      "Channel Image ",
+                      this.state.imageText,
+                      "required"
+                    )}
+                  </div>
+                                    <div className="check-box">
+                                        <div><b>{(this.state.imageText !== '')?this.state.imageText :"Upload Channel Photo"}</b></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn blue__btn">Add Channel</button>
-                                <button type="button" class="btn cancel__btn" data-dismiss="modal">Cancel</button>
+                            <div className="modal-footer">
+                                <button type="button" className="btn blue__btn" onClick={this.addChannel} >Add Channel</button>
+                                <button type="button" className="btn cancel__btn" data-dismiss="modal">Cancel</button>
                             </div>
                         </div>
                     </div>
