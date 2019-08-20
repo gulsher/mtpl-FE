@@ -17,7 +17,7 @@ const postLogout = (data) => {
 }
 
 const getChannelList = (page, limit) => {
-    return http.get(`${config.apiUrl}channel/?page=1&limit=10`).then(
+    return http.get(`${config.apiUrl}channel/?page=1&limit=30`).then(
         data => {
             return data ? data : '';
         }
