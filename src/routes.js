@@ -4,7 +4,7 @@ const routes = [
     { path: '/login', name: 'Login', component: LoginPage },
     { path: '/packages', exact: true, name: 'Packages', component: PackagesPage },
     { path: '/packs', exact: true, name: 'Packs', component: PacksPage } ,
-    { path: '/channel', exact: true, name: 'AssignedChannel', component: AssignedChannelPage },
+    { path: '/channel/:id', exact: true, name: 'AssignedChannel', component: AssignedChannelPage },
     { path: '/', exact: true, name: 'Login', component: LoginPage } 
     
        

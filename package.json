@@ -14,7 +14,8 @@
     "react-select": "^3.0.4",
     "react-toastify": "^5.3.2",
     "rxjs": "^6.5.2",
-    "simple-react-validator": "^1.2.2"
+    "simple-react-validator": "^1.2.2",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

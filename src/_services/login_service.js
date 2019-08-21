@@ -71,6 +71,17 @@ const addPack = data => {
   });
 };
 
+const getPackageList = () => {
+  return http.get(`${config.apiUrl}package/`).then(data=>{
+    return data ? data :"";
+  });
+};
+const addPackage =(data) =>{
+  return http.post(`${config.apiUrl}package/`, data).then(data=>{
+    return data ? data :"";
+  })
+}
+
 export const loginService = {
   postLogin,
   postLogout,
@@ -83,5 +94,7 @@ export const loginService = {
   addChannel,
   modifyChannel,
   getPackList,
-  addPack
+  addPack,
+  getPackageList,
+  addPackage
 };
