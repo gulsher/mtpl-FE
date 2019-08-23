@@ -82,6 +82,33 @@ const addPackage =(data) =>{
   })
 }
 
+const modifyPackage = (id,data)=>{
+  return http.patch(`${config.apiUrl}package/${id}`, data).then(data=>{
+    return data ? data : "";
+  });
+}
+const getAssignedChannelList =(id)=>{
+  return http.get(`${config.apiUrl}package/assignedChannels/${id}`).then(data=>{
+    return data ? data : "";
+  })
+}
+const getNotAssignedChannelList = (id)=>{
+    return http.get(`${config.apiUrl}package/notAssignedChannels/${id}`).then(data=>{
+      return data ? data : "";
+    })
+}
+const addChannelToPkg = (id,data) => {
+  return http.patch(`${config.apiUrl}package/addChannels/${id}`, data).then(data =>{
+    return data ? data : "";
+  })
+}
+
+const removeChannelfromPkg = (id,data) => {
+  return http.patch(`${config.apiUrl}package/removeChannels/${id}`, data).then(data =>{
+    return data ? data : "";
+  })
+}
+
 export const loginService = {
   postLogin,
   postLogout,
@@ -96,5 +123,10 @@ export const loginService = {
   getPackList,
   addPack,
   getPackageList,
-  addPackage
+  addPackage,
+  modifyPackage,
+  getAssignedChannelList,
+  getNotAssignedChannelList,
+  addChannelToPkg,
+  removeChannelfromPkg
 };

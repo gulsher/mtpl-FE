@@ -291,7 +291,8 @@ class MainPage extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.channelList.map((item, key) => {
+              {(this.state.channelList.length>0)?
+                this.state.channelList.map((item, key) => {
                 return (
                   <tr key={key}>
                     <td>{key+1}</td>
@@ -324,7 +325,7 @@ class MainPage extends Component {
                     </td>
                   </tr>
                 );
-              })}
+              }):"No data found"}
             </tbody>
           </table>
         </div>

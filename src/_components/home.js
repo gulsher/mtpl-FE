@@ -18,7 +18,7 @@ export default class HomePage extends Component {
                 <Router>
                     <div className="mian-container">
                         <div className="left-menu">
-                           {(this.state.token === null)? null :<LeftMenuPage /> }                        
+                           {(this.state.token === null)? " " :<LeftMenuPage /> }                        
                         </div>
                         <div className="right-menu">
                             <Switch>

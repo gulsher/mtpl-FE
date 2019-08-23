@@ -76,13 +76,15 @@ export default class PacksPage extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.packList.map((item,key)=>{
+                            {
+                                (this.state.packList.length>0)?
+                                this.state.packList.map((item,key)=>{
                                 return(
                                 <tr key={key}>
                                     <td>{key+1}</td>
                                     <td>{item.packName}</td>
                                 </tr>)
-                            })}
+                            }):"No data Found"}
                         </tbody>
                     </table>
                 </div>

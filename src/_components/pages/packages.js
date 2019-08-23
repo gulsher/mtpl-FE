@@ -25,9 +25,9 @@ export default class PackagesPage extends Component {
       currentPoint: "",
       //modify
       modifyId: ""
-
     };
     this.validator = new SimpleReactValidator();
+    this.validator2 = new SimpleReactValidator();
   }
 
   componentDidMount() {
@@ -174,7 +174,7 @@ export default class PackagesPage extends Component {
         price: this.state.price,
         points: points
       };
-      console.log(payload);
+
       let resp = await loginService.addPackage(payload);
       if (resp) {
         $(".close").click();
@@ -187,10 +187,33 @@ export default class PackagesPage extends Component {
       this.forceUpdate();
     }
   };
-  editLoader = (item) =>{
-    console.log(item);
+
+  modifyPackage = async () => {
+    if (this.validator2.allValid()) {
+      let payload = {
+        packageName: this.state.packageName,
+        regionId: this.state.selectedRegion.id,
+        languageId: this.state.selectedLanguage.id,
+        genreId: this.state.selectedGenre.id,
+        price: this.state.price,
+        points: [...this.state.allPoints]
+      };
+      let resp = await loginService.modifyPackage(this.state.modifyId, payload);
+      if (resp) {
+        $(".close").click();
+        toast.success("Package updated Successfully");
+        this.cancelAll();
+        this.getPackageList();
+      }
+    } else {
+      this.validator.showMessages();
+      this.forceUpdate();
+    }
+  };
+
+  editLoader = item => {
     this.setState({
-      packageName:item.packageName,
+      packageName: item.packageName,
       selectedRegion: {
         activeStatus: item.activeStatus,
         id: item.regionId.id,
@@ -212,8 +235,17 @@ export default class PackagesPage extends Component {
         value: item.genreId.genreName
       },
       price: item.price,
-    })
-  }
+      allPoints: item.points,
+      modifyId: item.id
+    });
+  };
+
+  pointEditHandler = (e, data, i) => {
+    let curr = e.target.value;
+    let allPoints = [...this.state.allPoints];
+    allPoints[i] = curr;
+    this.setState({ allPoints });
+  };
 
   render() {
     return (
@@ -244,7 +276,9 @@ export default class PackagesPage extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.packageList.map((item, key) => {
+              {
+                (this.state.packageList.length>0)?
+                this.state.packageList.map((item, key) => {
                 return (
                   <tr key={key}>
                     <td>{key + 1}</td>
@@ -272,7 +306,7 @@ export default class PackagesPage extends Component {
                     </td>
                   </tr>
                 );
-              })}
+              }):"No data found"}
             </tbody>
           </table>
         </div>
@@ -416,7 +450,6 @@ export default class PackagesPage extends Component {
           </div>
         </div>
 
-
         <div
           className="modal fade"
           id="modifyPackageModal"
@@ -449,7 +482,7 @@ export default class PackagesPage extends Component {
                     onChange={this.handlePackageName}
                   />
                   <div className="help-block">
-                    {this.validator.message(
+                    {this.validator2.message(
                       "Package",
                       this.state.packageName,
                       "required"
@@ -464,7 +497,7 @@ export default class PackagesPage extends Component {
                     value={this.state.selectedRegion}
                   />
                   <div className="help-block">
-                    {this.validator.message(
+                    {this.validator2.message(
                       "Region",
                       this.state.selectedRegion.value,
                       "required"
@@ -479,7 +512,7 @@ export default class PackagesPage extends Component {
                     value={this.state.selectedLanguage}
                   />
                   <div className="help-block">
-                    {this.validator.message(
+                    {this.validator2.message(
                       "Language",
                       this.state.selectedLanguage.value,
                       "required"
@@ -494,7 +527,7 @@ export default class PackagesPage extends Component {
                     value={this.state.selectedGenre}
                   />
                   <div className="help-block">
-                    {this.validator.message(
+                    {this.validator2.message(
                       "Genre",
                       this.state.selectedGenre.value,
                       "required"
@@ -509,7 +542,7 @@ export default class PackagesPage extends Component {
                     onChange={this.handlerPrice}
                   />
                   <div className="help-block">
-                    {this.validator.message(
+                    {this.validator2.message(
                       "Price",
                       this.state.price,
                       "required"
@@ -522,26 +555,21 @@ export default class PackagesPage extends Component {
                       <input
                         className="form-control blue-from"
                         placeholder={`Point ${key + 1}`}
-                        onChange={e => this.pointHandler(e, item)}
+                        onChange={e => this.pointEditHandler(e, item, key)}
+                        value={this.state.allPoints[key]}
                       />
                     </div>
                   );
                 })}
-                <button
-                  className="text-danger btn btn--ntg"
-                  onClick={this.addPoint}
-                >
-                  Add Point
-                </button>
                 {/* <a href="#" class="text-danger">Add Point</a>  */}
               </div>
               <div className="modal-footer">
                 <button
                   type="button"
-                  onClick={this.addPackage}
+                  onClick={this.modifyPackage}
                   className="btn blue__btn"
                 >
-                  Add Package
+                  Modify Package
                 </button>
                 <button
                   type="button"
