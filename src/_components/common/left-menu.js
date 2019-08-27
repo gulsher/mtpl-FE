@@ -20,9 +20,7 @@ class LeftMenuPage extends Component {
   };
 
   render() {
-    return localStorage.getItem("tokens") === null ? (
-      " "
-    ) : (
+    return (localStorage.getItem("tokens")=== null)? " ": (
       <div>
         <div className="left-part">
           <img src="/assets/images/mtpl-logo-top.svg" />
@@ -46,7 +44,7 @@ class LeftMenuPage extends Component {
           </ul>
         </div>
       </div>
-    );
+    )
   }
 }
 

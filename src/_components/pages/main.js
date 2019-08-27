@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import LeftMenuPage from "../common/left-menu";
+import { NavLink, Redirect } from "react-router-dom";
 import { loginService } from "../../_services/login_service";
 import Select from "react-select";
 import { async } from "q";
@@ -264,6 +265,9 @@ class MainPage extends Component {
   };
 
   render() {
+    if(localStorage.getItem("tokens") === null){
+      return <Redirect to="/" />
+  }
     return (
       <div>
         <div className="channelsinfo">

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 import { loginService } from "../../_services/login_service";
 import Select from "react-select";
 import { async } from "q";
@@ -126,6 +126,9 @@ export default class AssignedChannelPage extends Component {
   }
 
   render() {
+    if(localStorage.getItem("tokens") === null){
+      return <Redirect to="/" />
+  }
     return (
       <div>
         <div className="channelsinfo">
