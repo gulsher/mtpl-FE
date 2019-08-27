@@ -31,7 +31,6 @@ class MainPage extends Component {
     };
     this.validator = new SimpleReactValidator();
     this.validator2 = new SimpleReactValidator();
-
   }
 
   componentDidMount() {
@@ -203,7 +202,6 @@ class MainPage extends Component {
 
   modifyChannel = async () => {
     if (this.validator2.allValid()) {
-        
       let payload = {
         languageId: this.state.selectedLanguage.id,
         genreId: this.state.selectedGenre.id,
@@ -265,345 +263,351 @@ class MainPage extends Component {
   };
 
   render() {
-    if(localStorage.getItem("tokens") === null){
-      return <Redirect to="/" />
-  }
+    if (localStorage.getItem("tokens") === null) {
+      return <Redirect to="/" />;
+    }
     return (
       <div>
-        <div className="channelsinfo">
-          <h5 className="main__head">
-            <b>CHANNELS</b>
-            <button
-              className="btn blueborder-btn"
-              data-toggle="modal"
-              data-target="#addChannelModal"
-            >
-              Add Channel
-            </button>
-          </h5>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>CHANNEL NAME</th>
-                <th>BROADCASTER</th>
-                <th>REGION/CATEGORY</th>
-                <th>LANGUAGE</th>
-                <th>GENRE</th>
-                <th>PRICE</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody>
-              {(this.state.channelList.length>0)?
-                this.state.channelList.map((item, key) => {
-                return (
-                  <tr key={key}>
-                    <td>{key+1}</td>
-                    <td>
-                      <div className="float-left small__img">
-                        <img
-                          src={`data:image/jpeg;base64, ${
-                            item.channelImage.image
-                          }`}
-                          alt=""
-                        />
-                      </div>
-                      <div className="right">{item.channelName}</div>
-                      <div className="clearfix" />
-                    </td>
-                    <td>{item.broadCasterId.broadCasterName}</td>
-                    <td>{item.regionId.regionName}</td>
-                    <td>{item.languageId.languageName}</td>
-                    <td>{item.genreId.genreName}</td>
-                    <td>{item.price}</td>
-                    <td>
-                      <button
-                        className="btn blueborder-btn text-red"
-                        onClick={e => this.editLoader(item)}
-                        data-target="#modifyChannelModal"
-                        data-toggle="modal"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                );
-              }):"No data found"}
-            </tbody>
-          </table>
-        </div>
-
-        <div
-          className="modal fade"
-          id="addChannelModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="addChannelLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content border-0 custom__modal">
-              <div className="modal-header">
-                <h5 className="modal-title" id="addChannelLabel">
-                  Add Channel
-                </h5>
+        <div className="mian-container">
+          <div className="left-menu">
+            <LeftMenuPage />
+          </div>
+          <div className="right-menu">
+            <div className="channelsinfo">
+              <h5 className="main__head">
+                <b>CHANNELS</b>
                 <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
+                  className="btn blueborder-btn"
+                  data-toggle="modal"
+                  data-target="#addChannelModal"
                 >
-                  <span aria-hidden="true">&times;</span>
+                  Add Channel
                 </button>
-              </div>
-              <div className="modal-body pm-30">
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleBroadcastSelect}
-                    options={this.state.broadcastOptions}
-                    placeholder="Broadcaster"
-                    value={this.state.selectedBroadcast}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Broadcaster",
-                      this.state.selectedBroadcast.value,
-                      "required"
-                    )}
+              </h5>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>CHANNEL NAME</th>
+                    <th>BROADCASTER</th>
+                    <th>REGION/CATEGORY</th>
+                    <th>LANGUAGE</th>
+                    <th>GENRE</th>
+                    <th>PRICE</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.channelList.length > 0
+                    ? this.state.channelList.map((item, key) => {
+                        return (
+                          <tr key={key}>
+                            <td>{key + 1}</td>
+                            <td>
+                              <div className="float-left small__img">
+                                <img
+                                  src={`data:image/jpeg;base64, ${
+                                    item.channelImage.image
+                                  }`}
+                                  alt=""
+                                />
+                              </div>
+                              <div className="right">{item.channelName}</div>
+                              <div className="clearfix" />
+                            </td>
+                            <td>{item.broadCasterId.broadCasterName}</td>
+                            <td>{item.regionId.regionName}</td>
+                            <td>{item.languageId.languageName}</td>
+                            <td>{item.genreId.genreName}</td>
+                            <td>{item.price}</td>
+                            <td>
+                              <button
+                                className="btn blueborder-btn text-red"
+                                onClick={e => this.editLoader(item)}
+                                data-target="#modifyChannelModal"
+                                data-toggle="modal"
+                              >
+                                Edit
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    : "No data found"}
+                </tbody>
+              </table>
+            </div>
+
+            <div
+              className="modal fade"
+              id="addChannelModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="addChannelLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content border-0 custom__modal">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="addChannelLabel">
+                      Add Channel
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                   </div>
-                </div>
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    placeholder="Channel Name"
-                    onChange={this.channelNameHandler}
-                    value={this.state.channelNameInput}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Channel",
-                      this.state.channelNameInput,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleRegion}
-                    options={this.state.regionOptions}
-                    placeholder="Select Region"
-                    value={this.state.selectedRegion}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Region",
-                      this.state.selectedRegion.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleLanguage}
-                    options={this.state.languageOptions}
-                    placeholder="Select Language"
-                    value={this.state.selectedLanguage}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Language",
-                      this.state.selectedLanguage.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleGenre}
-                    options={this.state.genreOptions}
-                    placeholder="select Genre"
-                    value={this.state.selectedGenre}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Genre",
-                      this.state.selectedGenre.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    onChange={this.pricehandler}
-                    placeholder="Price"
-                    value={this.state.priceInput}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Price",
-                      this.state.priceInput,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="upload-input">
-                  <input type="file" onChange={this.imageUploadHandler} />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Channel Image ",
-                      this.state.imageText,
-                      "required"
-                    )}
-                  </div>
-                  <div className="check-box">
-                    <div>
-                      <b>
-                        {this.state.imageText !== ""
-                          ? this.state.imageText
-                          : "Upload Channel Photo"}
-                      </b>
+                  <div className="modal-body pm-30">
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleBroadcastSelect}
+                        options={this.state.broadcastOptions}
+                        placeholder="Broadcaster"
+                        value={this.state.selectedBroadcast}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Broadcaster",
+                          this.state.selectedBroadcast.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-control blue-from"
+                        placeholder="Channel Name"
+                        onChange={this.channelNameHandler}
+                        value={this.state.channelNameInput}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Channel",
+                          this.state.channelNameInput,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleRegion}
+                        options={this.state.regionOptions}
+                        placeholder="Select Region"
+                        value={this.state.selectedRegion}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Region",
+                          this.state.selectedRegion.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleLanguage}
+                        options={this.state.languageOptions}
+                        placeholder="Select Language"
+                        value={this.state.selectedLanguage}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Language",
+                          this.state.selectedLanguage.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleGenre}
+                        options={this.state.genreOptions}
+                        placeholder="select Genre"
+                        value={this.state.selectedGenre}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Genre",
+                          this.state.selectedGenre.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-control blue-from"
+                        onChange={this.pricehandler}
+                        placeholder="Price"
+                        value={this.state.priceInput}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Price",
+                          this.state.priceInput,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="upload-input">
+                      <input type="file" onChange={this.imageUploadHandler} />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Channel Image ",
+                          this.state.imageText,
+                          "required"
+                        )}
+                      </div>
+                      <div className="check-box">
+                        <div>
+                          <b>
+                            {this.state.imageText !== ""
+                              ? this.state.imageText
+                              : "Upload Channel Photo"}
+                          </b>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn blue__btn"
+                      onClick={this.addChannel}
+                    >
+                      Add Channel
+                    </button>
+                    <button
+                      type="button"
+                      className="btn cancel__btn"
+                      data-dismiss="modal"
+                      onClick={this.cancelAll}
+                    >
+                      Cancel
+                    </button>
+                  </div>
                 </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn blue__btn"
-                  onClick={this.addChannel}
-                >
-                  Add Channel
-                </button>
-                <button
-                  type="button"
-                  className="btn cancel__btn"
-                  data-dismiss="modal"
-                  onClick={this.cancelAll}
-                >
-                  Cancel
-                </button>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div
-          className="modal fade"
-          id="modifyChannelModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="modifyChannelLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content border-0 custom__modal">
-              <div className="modal-header">
-                <h5 className="modal-title" id="modifyChannelLabel">
-                  Modify Channel
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body pm-30">
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleBroadcastSelect}
-                    options={this.state.broadcastOptions}
-                    placeholder="Broadcaster"
-                    value={this.state.selectedBroadcast}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Broadcaster",
-                      this.state.selectedBroadcast.value,
-                      "required"
-                    )}
+            <div
+              className="modal fade"
+              id="modifyChannelModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="modifyChannelLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content border-0 custom__modal">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="modifyChannelLabel">
+                      Modify Channel
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                   </div>
-                </div>
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    placeholder="Channel Name"
-                    onChange={this.channelNameHandler}
-                    value={this.state.channelNameInput}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Channel",
-                      this.state.channelNameInput,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleRegion}
-                    options={this.state.regionOptions}
-                    placeholder="Select Region"
-                    value={this.state.selectedRegion}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Region",
-                      this.state.selectedRegion.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleLanguage}
-                    options={this.state.languageOptions}
-                    placeholder="Select Language"
-                    value={this.state.selectedLanguage}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Language",
-                      this.state.selectedLanguage.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleGenre}
-                    options={this.state.genreOptions}
-                    placeholder="select Genre"
-                    value={this.state.selectedGenre}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Genre",
-                      this.state.selectedGenre.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    onChange={this.pricehandler}
-                    placeholder="Price"
-                    value={this.state.priceInput}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Price",
-                      this.state.priceInput,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                {/* <div className="upload-input">
+                  <div className="modal-body pm-30">
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleBroadcastSelect}
+                        options={this.state.broadcastOptions}
+                        placeholder="Broadcaster"
+                        value={this.state.selectedBroadcast}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Broadcaster",
+                          this.state.selectedBroadcast.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-control blue-from"
+                        placeholder="Channel Name"
+                        onChange={this.channelNameHandler}
+                        value={this.state.channelNameInput}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Channel",
+                          this.state.channelNameInput,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleRegion}
+                        options={this.state.regionOptions}
+                        placeholder="Select Region"
+                        value={this.state.selectedRegion}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Region",
+                          this.state.selectedRegion.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleLanguage}
+                        options={this.state.languageOptions}
+                        placeholder="Select Language"
+                        value={this.state.selectedLanguage}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Language",
+                          this.state.selectedLanguage.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleGenre}
+                        options={this.state.genreOptions}
+                        placeholder="select Genre"
+                        value={this.state.selectedGenre}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Genre",
+                          this.state.selectedGenre.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-control blue-from"
+                        onChange={this.pricehandler}
+                        placeholder="Price"
+                        value={this.state.priceInput}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Price",
+                          this.state.priceInput,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    {/* <div className="upload-input">
                   <input type="file" onChange={this.imageUploadHandler} />
                   <div className="help-block">
                     {this.validator.message(
@@ -622,23 +626,25 @@ class MainPage extends Component {
                     </div>
                   </div>
                 </div> */}
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn blue__btn"
-                  onClick={this.modifyChannel}
-                >
-                  Modify
-                </button>
-                <button
-                  type="button"
-                  className="btn cancel__btn"
-                  data-dismiss="modal"
-                  onClick={this.cancelAll}
-                >
-                  Cancel
-                </button>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn blue__btn"
+                      onClick={this.modifyChannel}
+                    >
+                      Modify
+                    </button>
+                    <button
+                      type="button"
+                      className="btn cancel__btn"
+                      data-dismiss="modal"
+                      onClick={this.cancelAll}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

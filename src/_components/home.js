@@ -14,11 +14,6 @@ export default class HomePage extends Component {
     return (
       <div>
         <Router>
-          <div className="mian-container">
-            <div className="left-menu">
-              <LeftMenuPage />
-            </div>
-            <div className="right-menu">
               <Switch>
                 {routes.map((route, key) => {
                   return route.component ? (
@@ -33,8 +28,6 @@ export default class HomePage extends Component {
                   ) : null;
                 })}
               </Switch>
-            </div>
-          </div>
         </Router>
       </div>
     );

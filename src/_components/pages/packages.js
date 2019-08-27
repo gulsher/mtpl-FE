@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { NavLink ,Redirect} from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 import { loginService } from "../../_services/login_service";
 import Select from "react-select";
 import { async } from "q";
@@ -7,6 +7,8 @@ import { toast } from "react-toastify";
 import uuid from "uuid";
 import SimpleReactValidator from "simple-react-validator";
 import $ from "jquery";
+import LeftMenuPage from "../common/left-menu";
+
 export default class PackagesPage extends Component {
   constructor(props) {
     super(props);
@@ -248,340 +250,350 @@ export default class PackagesPage extends Component {
   };
 
   render() {
-    if(localStorage.getItem("tokens") === null){
-      return <Redirect to="/" />
-  }
+    if (localStorage.getItem("tokens") === null) {
+      return <Redirect to="/" />;
+    }
     return (
       <div>
-        <div className="channelsinfo">
-          <h5 className="main__head">
-            <b>PACKAGES</b>
-            <button
-              className="btn blueborder-btn"
-              data-toggle="modal"
-              data-target="#addPackageModal"
-            >
-              Add Package
-            </button>
-          </h5>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>PACKAGE NAME</th>
-                <th>REGION/CATEGORY</th>
-                <th>PRIMARY LANGUAGE</th>
-                <th>PRIMARY GENRE</th>
-                <th>CHANNELS ASSIGNED</th>
-                <th>PACKAGE POINTS</th>
-                <th>PRICE</th>
-                <th>ACTION</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                (this.state.packageList.length>0)?
-                this.state.packageList.map((item, key) => {
-                return (
-                  <tr key={key}>
-                    <td>{key + 1}</td>
-                    <td>{item.packageName}</td>
-                    <td>{item.regionId.regionName}</td>
-                    <td>{item.languageId.languageName}</td>
-                    <td>{item.genreId.genreName}</td>
-                    <td>
-                      <NavLink to={`/channel/${item.id}`} className="text-red">
-                        VIEW
-                      </NavLink>
-                    </td>
-                    <td>{this.commaIncludingFunction(item.points)}</td>
-                    <td>{item.price}</td>
-                    <td>
-                      <button
-                        href="#"
-                        className="btn blueborder-btn text-red"
-                        onClick={e => this.editLoader(item)}
-                        data-target="#modifyPackageModal"
-                        data-toggle="modal"
-                      >
-                        Edit
-                      </button>
-                    </td>
-                  </tr>
-                );
-              }):"No data found"}
-            </tbody>
-          </table>
-        </div>
-
-        <div
-          className="modal fade"
-          id="addPackageModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="addPackageLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content border-0 custom__modal">
-              <div className="modal-header">
-                <h5 className="modal-title" id="addPackageLabel">
-                  Add Package
-                </h5>
+        <div className="mian-container">
+          <div className="left-menu">
+            <LeftMenuPage />
+          </div>
+          <div className="right-menu">
+            <div className="channelsinfo">
+              <h5 className="main__head">
+                <b>PACKAGES</b>
                 <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
+                  className="btn blueborder-btn"
+                  data-toggle="modal"
+                  data-target="#addPackageModal"
                 >
-                  <span aria-hidden="true">&times;</span>
+                  Add Package
                 </button>
-              </div>
-              <div className="modal-body pm-30">
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    placeholder="Package Name"
-                    value={this.state.packageName}
-                    onChange={this.handlePackageName}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Package",
-                      this.state.packageName,
-                      "required"
-                    )}
+              </h5>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>PACKAGE NAME</th>
+                    <th>REGION/CATEGORY</th>
+                    <th>PRIMARY LANGUAGE</th>
+                    <th>PRIMARY GENRE</th>
+                    <th>CHANNELS ASSIGNED</th>
+                    <th>PACKAGE POINTS</th>
+                    <th>PRICE</th>
+                    <th>ACTION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.packageList.length > 0
+                    ? this.state.packageList.map((item, key) => {
+                        return (
+                          <tr key={key}>
+                            <td>{key + 1}</td>
+                            <td>{item.packageName}</td>
+                            <td>{item.regionId.regionName}</td>
+                            <td>{item.languageId.languageName}</td>
+                            <td>{item.genreId.genreName}</td>
+                            <td>
+                              <NavLink
+                                to={`/channel/${item.id}`}
+                                className="text-red"
+                              >
+                                VIEW
+                              </NavLink>
+                            </td>
+                            <td>{this.commaIncludingFunction(item.points)}</td>
+                            <td>{item.price}</td>
+                            <td>
+                              <button
+                                href="#"
+                                className="btn blueborder-btn text-red"
+                                onClick={e => this.editLoader(item)}
+                                data-target="#modifyPackageModal"
+                                data-toggle="modal"
+                              >
+                                Edit
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    : "No data found"}
+                </tbody>
+              </table>
+            </div>
+
+            <div
+              className="modal fade"
+              id="addPackageModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="addPackageLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content border-0 custom__modal">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="addPackageLabel">
+                      Add Package
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                   </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleRegion}
-                    options={this.state.regionOptions}
-                    placeholder="Select Region"
-                    value={this.state.selectedRegion}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Region",
-                      this.state.selectedRegion.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleLanguage}
-                    options={this.state.languageOptions}
-                    placeholder="Select Language"
-                    value={this.state.selectedLanguage}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Language",
-                      this.state.selectedLanguage.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleGenre}
-                    options={this.state.genreOptions}
-                    placeholder="select Genre"
-                    value={this.state.selectedGenre}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Genre",
-                      this.state.selectedGenre.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    placeholder="Price"
-                    value={this.state.price}
-                    onChange={this.handlerPrice}
-                  />
-                  <div className="help-block">
-                    {this.validator.message(
-                      "Price",
-                      this.state.price,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                {this.state.allPoints.map((item, key) => {
-                  return (
-                    <div key={key} className="form-group">
+                  <div className="modal-body pm-30">
+                    <div className="form-group">
                       <input
                         className="form-control blue-from"
-                        placeholder={`Point ${key + 1}`}
-                        onChange={e => this.pointHandler(e, item)}
+                        placeholder="Package Name"
+                        value={this.state.packageName}
+                        onChange={this.handlePackageName}
                       />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Package",
+                          this.state.packageName,
+                          "required"
+                        )}
+                      </div>
                     </div>
-                  );
-                })}
-                <button
-                  className="text-danger btn btn--ntg"
-                  onClick={this.addPoint}
-                >
-                  Add Point
-                </button>
-                {/* <a href="#" class="text-danger">Add Point</a>  */}
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  onClick={this.addPackage}
-                  className="btn blue__btn"
-                >
-                  Add Package
-                </button>
-                <button
-                  type="button"
-                  className="btn cancel__btn"
-                  data-dismiss="modal"
-                  onClick={this.cancelAll}
-                >
-                  Cancel
-                </button>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleRegion}
+                        options={this.state.regionOptions}
+                        placeholder="Select Region"
+                        value={this.state.selectedRegion}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Region",
+                          this.state.selectedRegion.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleLanguage}
+                        options={this.state.languageOptions}
+                        placeholder="Select Language"
+                        value={this.state.selectedLanguage}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Language",
+                          this.state.selectedLanguage.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleGenre}
+                        options={this.state.genreOptions}
+                        placeholder="select Genre"
+                        value={this.state.selectedGenre}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Genre",
+                          this.state.selectedGenre.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-control blue-from"
+                        placeholder="Price"
+                        value={this.state.price}
+                        onChange={this.handlerPrice}
+                      />
+                      <div className="help-block">
+                        {this.validator.message(
+                          "Price",
+                          this.state.price,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    {this.state.allPoints.map((item, key) => {
+                      return (
+                        <div key={key} className="form-group">
+                          <input
+                            className="form-control blue-from"
+                            placeholder={`Point ${key + 1}`}
+                            onChange={e => this.pointHandler(e, item)}
+                          />
+                        </div>
+                      );
+                    })}
+                    <button
+                      className="text-danger btn btn--ntg"
+                      onClick={this.addPoint}
+                    >
+                      Add Point
+                    </button>
+                    {/* <a href="#" class="text-danger">Add Point</a>  */}
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      onClick={this.addPackage}
+                      className="btn blue__btn"
+                    >
+                      Add Package
+                    </button>
+                    <button
+                      type="button"
+                      className="btn cancel__btn"
+                      data-dismiss="modal"
+                      onClick={this.cancelAll}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div
-          className="modal fade"
-          id="modifyPackageModal"
-          tabIndex="-1"
-          role="dialog"
-          aria-labelledby="modifyPackageLabel"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog" role="document">
-            <div className="modal-content border-0 custom__modal">
-              <div className="modal-header">
-                <h5 className="modal-title" id="modifyPackageLabel">
-                  Modify Package
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body pm-30">
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    placeholder="Package Name"
-                    value={this.state.packageName}
-                    onChange={this.handlePackageName}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Package",
-                      this.state.packageName,
-                      "required"
-                    )}
+            <div
+              className="modal fade"
+              id="modifyPackageModal"
+              tabIndex="-1"
+              role="dialog"
+              aria-labelledby="modifyPackageLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content border-0 custom__modal">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="modifyPackageLabel">
+                      Modify Package
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
                   </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleRegion}
-                    options={this.state.regionOptions}
-                    placeholder="Select Region"
-                    value={this.state.selectedRegion}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Region",
-                      this.state.selectedRegion.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleLanguage}
-                    options={this.state.languageOptions}
-                    placeholder="Select Language"
-                    value={this.state.selectedLanguage}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Language",
-                      this.state.selectedLanguage.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <Select
-                    onChange={this.handleGenre}
-                    options={this.state.genreOptions}
-                    placeholder="select Genre"
-                    value={this.state.selectedGenre}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Genre",
-                      this.state.selectedGenre.value,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                <div className="form-group">
-                  <input
-                    className="form-control blue-from"
-                    placeholder="Price"
-                    value={this.state.price}
-                    onChange={this.handlerPrice}
-                  />
-                  <div className="help-block">
-                    {this.validator2.message(
-                      "Price",
-                      this.state.price,
-                      "required"
-                    )}
-                  </div>
-                </div>
-                {this.state.allPoints.map((item, key) => {
-                  return (
-                    <div key={key} className="form-group">
+                  <div className="modal-body pm-30">
+                    <div className="form-group">
                       <input
                         className="form-control blue-from"
-                        placeholder={`Point ${key + 1}`}
-                        onChange={e => this.pointEditHandler(e, item, key)}
-                        value={this.state.allPoints[key]}
+                        placeholder="Package Name"
+                        value={this.state.packageName}
+                        onChange={this.handlePackageName}
                       />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Package",
+                          this.state.packageName,
+                          "required"
+                        )}
+                      </div>
                     </div>
-                  );
-                })}
-                {/* <a href="#" class="text-danger">Add Point</a>  */}
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  onClick={this.modifyPackage}
-                  className="btn blue__btn"
-                >
-                  Modify Package
-                </button>
-                <button
-                  type="button"
-                  className="btn cancel__btn"
-                  data-dismiss="modal"
-                  onClick={this.cancelAll}
-                >
-                  Cancel
-                </button>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleRegion}
+                        options={this.state.regionOptions}
+                        placeholder="Select Region"
+                        value={this.state.selectedRegion}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Region",
+                          this.state.selectedRegion.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleLanguage}
+                        options={this.state.languageOptions}
+                        placeholder="Select Language"
+                        value={this.state.selectedLanguage}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Language",
+                          this.state.selectedLanguage.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <Select
+                        onChange={this.handleGenre}
+                        options={this.state.genreOptions}
+                        placeholder="select Genre"
+                        value={this.state.selectedGenre}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Genre",
+                          this.state.selectedGenre.value,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <input
+                        className="form-control blue-from"
+                        placeholder="Price"
+                        value={this.state.price}
+                        onChange={this.handlerPrice}
+                      />
+                      <div className="help-block">
+                        {this.validator2.message(
+                          "Price",
+                          this.state.price,
+                          "required"
+                        )}
+                      </div>
+                    </div>
+                    {this.state.allPoints.map((item, key) => {
+                      return (
+                        <div key={key} className="form-group">
+                          <input
+                            className="form-control blue-from"
+                            placeholder={`Point ${key + 1}`}
+                            onChange={e => this.pointEditHandler(e, item, key)}
+                            value={this.state.allPoints[key]}
+                          />
+                        </div>
+                      );
+                    })}
+                    {/* <a href="#" class="text-danger">Add Point</a>  */}
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      onClick={this.modifyPackage}
+                      className="btn blue__btn"
+                    >
+                      Modify Package
+                    </button>
+                    <button
+                      type="button"
+                      className="btn cancel__btn"
+                      data-dismiss="modal"
+                      onClick={this.cancelAll}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
